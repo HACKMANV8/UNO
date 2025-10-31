@@ -27,6 +27,7 @@ import StudentDashboardPage from "./pages/StudentDashboardPage";
 import StudentResumeBuilderPage from "./pages/StudentResumeBuilderPage";
 import StudentJobApplicationsPage from "./pages/StudentJobApplicationsPage";
 import StudentInterviewPrepPage from "./pages/StudentInterviewPrepPage";
+import StudentInterviewSimulationPage from "./pages/StudentInterviewSimulationPage";
 import StudentAICoachPage from "./pages/StudentAICoachPage";
 import StudentSettingsPage from "./pages/StudentSettingsPage";
 import StudentResumeEditorPage from "./pages/StudentResumeEditorPage";
@@ -41,9 +42,10 @@ import FirebaseIssuerDashboard from "./pages/FirebaseIssuerDashboard";
 import FirebaseStudentDashboard from "./pages/FirebaseStudentDashboard";
 import AuthorizationStatusPage from "./pages/AuthorizationStatusPage";
 import NotFound from "./pages/NotFound";
-
-// Development component for creating authority user
-import CreateAuthorityUser from "./components/dev/CreateAuthorityUser";
+import StudentPricingPage from "./pages/StudentPricingPage";
+import RecruiterPricingPage from "./pages/RecruiterPricingPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import SubscriptionPage from "./pages/SubscriptionPage";
 
 const queryClient = new QueryClient();
 
@@ -120,6 +122,11 @@ const App = () => {
           <Route path="/signup/firebase-issuer" element={<FirebaseIssuerSignupPage />} />
           <Route path="/signup/authority" element={<AuthoritySignupPage />} />
           <Route path="/authorization-status" element={<AuthorizationStatusPage />} />
+          
+          {/* Pricing routes - accessible to all users */}
+          <Route path="/pricing/student" element={<StudentPricingPage />} />
+          <Route path="/pricing/recruiter" element={<RecruiterPricingPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
 
           {/* Protected routes with layout */}
           <Route element={
@@ -145,7 +152,7 @@ const App = () => {
             } />
             <Route path="/student/interview" element={
               <ProtectedRoute allowedRoles={['student']}>
-                <StudentInterviewPrepPage />
+                <StudentInterviewSimulationPage />
               </ProtectedRoute>
             } />
             <Route path="/student/ai-coach" element={
@@ -168,6 +175,9 @@ const App = () => {
                 <StudentSettingsPage />
               </ProtectedRoute>
             } />
+
+            {/* Subscription Management - accessible to all authenticated users */}
+            <Route path="/subscription" element={<SubscriptionPage />} />
 
             {/* Issuer routes */}
             <Route path="/issuer/dashboard" element={
@@ -212,9 +222,6 @@ const App = () => {
           {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        
-        {/* Development tool - remove in production */}
-        {process.env.NODE_ENV === 'development' && <CreateAuthorityUser />}
         
         </BrowserRouter>
       </TooltipProvider>

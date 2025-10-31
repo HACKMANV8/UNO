@@ -26,6 +26,18 @@ export function Header() {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-2">
+            {/* Navigation Links */}
+            {!isLoggedIn && (
+              <div className="hidden md:flex items-center space-x-4 mr-4">
+                <Button variant="ghost" asChild>
+                  <Link to="/pricing/student">Student Pricing</Link>
+                </Button>
+                <Button variant="ghost" asChild>
+                  <Link to="/pricing/recruiter">Recruiter Pricing</Link>
+                </Button>
+              </div>
+            )}
+
             {/* Theme Toggle */}
             <Button
               variant="ghost"
@@ -43,6 +55,9 @@ export function Header() {
             {/* User Menu */}
             {isLoggedIn && user ? (
               <div className="flex items-center space-x-2 ml-2">
+                <Button variant="ghost" asChild>
+                  <Link to="/subscription">Billing</Link>
+                </Button>
                 <div className="hidden md:flex items-center space-x-2 px-3 py-1.5 glass-card rounded-lg">
                   <User className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium">{user.name}</span>

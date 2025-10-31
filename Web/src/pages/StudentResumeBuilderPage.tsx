@@ -9,57 +9,41 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
 import { generateResumePDF } from '@/lib/pdfGenerator';
-import { ProfessionalResumeTemplate } from '@/components/ProfessionalResumeTemplate';
+import { 
+  ModernTemplate, 
+  CreativeTemplate, 
+  AcademicTemplate 
+} from '@/components/resume-templates';
+import { TemplatePreview } from '@/components/resume-templates/TemplatePreview';
 
-// Mock data for resume templates
+// Enhanced resume templates with detailed descriptions and features
 const RESUME_TEMPLATES = [
-  {
-    id: 'classic',
-    name: 'Classic Professional',
-    description: 'Clean, traditional layout perfect for corporate roles',
-    isPremium: false,
-    thumbnail: '/api/placeholder/300/400',
-    category: 'Traditional'
-  },
   {
     id: 'modern',
     name: 'Modern Minimalist',
-    description: 'Contemporary design with clean lines and typography',
+    description: 'Contemporary design with clean lines, perfect for tech and startup environments',
     isPremium: false,
-    thumbnail: '/api/placeholder/300/400',
-    category: 'Modern'
+    category: 'Modern',
+    features: ['Two-Column Layout', 'Color Accents', 'Modern Typography', 'Space Efficient'],
+    bestFor: 'Tech companies, Startups, Marketing, Design roles'
   },
   {
     id: 'creative',
     name: 'Creative Portfolio',
-    description: 'Eye-catching design for creative professionals',
+    description: 'Eye-catching design with visual elements for creative professionals',
     isPremium: true,
-    thumbnail: '/api/placeholder/300/400',
-    category: 'Creative'
-  },
-  {
-    id: 'executive',
-    name: 'Executive Elite',
-    description: 'Premium template for senior leadership positions',
-    isPremium: true,
-    thumbnail: '/api/placeholder/300/400',
-    category: 'Executive'
-  },
-  {
-    id: 'tech',
-    name: 'Tech Professional',
-    description: 'Perfect for software developers and IT professionals',
-    isPremium: false,
-    thumbnail: '/api/placeholder/300/400',
-    category: 'Technology'
+    category: 'Creative',
+    features: ['Visual Design', 'Color Gradients', 'Unique Layout', 'Portfolio Style'],
+    bestFor: 'Designers, Artists, Creative Directors, Marketing'
   },
   {
     id: 'academic',
     name: 'Academic Scholar',
-    description: 'Designed for researchers and academic positions',
-    isPremium: true,
-    thumbnail: '/api/placeholder/300/400',
-    category: 'Academic'
+    description: 'Scholarly design optimized for researchers and academic positions',
+    isPremium: false,
+    category: 'Academic',
+    features: ['Academic Format', 'Research Focus', 'Publication Ready', 'CV Style'],
+    bestFor: 'Researchers, Professors, PhD candidates, Academic roles'
   }
 ];
 
@@ -150,142 +134,12 @@ export default function StudentResumeBuilderPage() {
         skills: ['JavaScript', 'React', 'Node.js', 'Python', 'AWS', 'Docker', 'MongoDB'],
       };
 
-      // Create a temporary container for the resume
-      const tempContainer = document.createElement('div');
-      tempContainer.style.position = 'absolute';
-      tempContainer.style.left = '-9999px';
-      tempContainer.style.top = '0';
-      tempContainer.innerHTML = `
-        <div id="resume-template" style="
-          font-family: Georgia, serif;
-          line-height: 1.5;
-          font-size: 14px;
-          width: 8.5in;
-          min-height: 11in;
-          margin: 0 auto;
-          padding: 0.75in;
-          box-sizing: border-box;
-          background: white;
-          color: black;
-        ">
-          ${renderResumeHTML(mockResumeData)}
-        </div>
-      `;
-      
-      document.body.appendChild(tempContainer);
-
-      // Generate PDF
+      // Generate PDF using the classic template by default
       await generateResumePDF(mockResumeData, `resume-${resumeId}.pdf`);
-      
-      // Clean up
-      document.body.removeChild(tempContainer);
     } catch (error) {
       console.error('Error downloading resume:', error);
       alert('Failed to download resume. Please try again.');
     }
-  };
-
-  const renderResumeHTML = (data: any) => {
-    return `
-      <div style="text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #ccc;">
-        <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem; color: #2c3e50; letter-spacing: 1px;">
-          ${data.personalInfo.fullName}
-        </h1>
-        <div style="display: flex; justify-content: center; gap: 1.5rem; font-size: 0.875rem; color: #666;">
-          <span>${data.personalInfo.email}</span>
-          <span>•</span>
-          <span>${data.personalInfo.phone}</span>
-          <span>•</span>
-          <span>${data.personalInfo.location}</span>
-        </div>
-      </div>
-
-      ${data.personalInfo.summary ? `
-        <div style="margin-bottom: 2rem;">
-          <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.75rem; color: #2c3e50; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #34495e; padding-bottom: 0.25rem;">
-            Professional Summary
-          </h2>
-          <p style="color: #555; line-height: 1.6; text-align: justify;">
-            ${data.personalInfo.summary}
-          </p>
-        </div>
-      ` : ''}
-
-      ${data.experience.length > 0 ? `
-        <div style="margin-bottom: 2rem;">
-          <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; color: #2c3e50; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #34495e; padding-bottom: 0.25rem;">
-            Professional Experience
-          </h2>
-          ${data.experience.map((exp: any) => `
-            <div style="margin-bottom: 1.5rem;">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                <div style="flex: 1;">
-                  <h3 style="font-size: 1.125rem; font-weight: 600; color: #2c3e50;">
-                    ${exp.position}
-                  </h3>
-                  <p style="font-style: italic; color: #34495e; font-weight: 500;">
-                    ${exp.company}
-                  </p>
-                </div>
-                <div style="color: #7f8c8d; font-weight: 500; min-width: 140px; text-align: right;">
-                  ${exp.startDate} - ${exp.endDate || 'Present'}
-                </div>
-              </div>
-              <ul style="list-style-type: disc; padding-left: 1.25rem; line-height: 1.6; color: #555;">
-                ${exp.description.split('.').filter((line: string) => line.trim()).map((line: string) => 
-                  `<li style="margin-bottom: 0.25rem;">${line.trim()}${line.trim() ? '.' : ''}</li>`
-                ).join('')}
-              </ul>
-            </div>
-          `).join('')}
-        </div>
-      ` : ''}
-
-      ${data.education.length > 0 ? `
-        <div style="margin-bottom: 2rem;">
-          <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; color: #2c3e50; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #34495e; padding-bottom: 0.25rem;">
-            Education
-          </h2>
-          ${data.education.map((edu: any) => `
-            <div style="margin-bottom: 1rem;">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div style="flex: 1;">
-                  <h3 style="font-size: 1.125rem; font-weight: 600; color: #2c3e50;">
-                    ${edu.degree} in ${edu.field}
-                  </h3>
-                  <p style="font-style: italic; color: #34495e; font-weight: 500;">
-                    ${edu.institution}
-                  </p>
-                  ${edu.gpa ? `<p style="color: #7f8c8d;">GPA: ${edu.gpa}</p>` : ''}
-                </div>
-                <div style="color: #7f8c8d; font-weight: 500; min-width: 100px; text-align: right;">
-                  ${edu.graduationDate}
-                </div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      ` : ''}
-
-      ${data.skills.length > 0 ? `
-        <div style="margin-bottom: 2rem;">
-          <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; color: #2c3e50; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #34495e; padding-bottom: 0.25rem;">
-            Core Competencies
-          </h2>
-          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-            ${data.skills.map((skill: string, index: number) => 
-              `<span style="margin-right: 1rem; margin-bottom: 0.25rem; color: #2c3e50; font-weight: 500;">
-                ${skill}${index < data.skills.length - 1 ? ' •' : ''}
-              </span>`
-            ).join('')}
-          </div>
-        </div>
-      ` : ''}
-
-      <div style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #ccc; text-align: center; font-size: 0.75rem; color: #888;">
-        References available upon request
-      </div>
-    `;
   };
 
   const handleDeleteResume = (resumeId: string) => {
@@ -336,10 +190,10 @@ export default function StudentResumeBuilderPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {RESUME_TEMPLATES.map((template) => (
-              <Card key={template.id} className="group hover:shadow-lg transition-all duration-200">
+              <Card key={template.id} className="group hover:shadow-lg transition-all duration-200 overflow-hidden">
                 <div className="relative">
-                  <div className="aspect-[3/4] bg-muted rounded-t-lg flex items-center justify-center">
-                    <FileText className="h-16 w-16 text-muted-foreground" />
+                  <div className="aspect-[3/4] bg-muted">
+                    <TemplatePreview templateId={template.id} templateName={template.name} />
                   </div>
                   {template.isPremium && (
                     <div className="absolute top-3 right-3">
@@ -363,6 +217,24 @@ export default function StudentResumeBuilderPage() {
                   <CardDescription className="text-sm">
                     {template.description}
                   </CardDescription>
+                  
+                  {/* Template Features */}
+                  <div className="mt-2">
+                    <div className="text-xs text-muted-foreground mb-2">Features:</div>
+                    <div className="flex flex-wrap gap-1">
+                      {template.features.slice(0, 3).map((feature, idx) => (
+                        <Badge key={idx} variant="secondary" className="text-xs">
+                          {feature}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Best For */}
+                  <div className="mt-2">
+                    <div className="text-xs text-muted-foreground mb-1">Best for:</div>
+                    <div className="text-xs text-gray-600">{template.bestFor}</div>
+                  </div>
                 </CardHeader>
                 
                 <CardContent className="pt-0">
@@ -491,7 +363,7 @@ export default function StudentResumeBuilderPage() {
 
       {/* Template Preview Modal */}
       <Dialog open={!!previewTemplate} onOpenChange={() => setPreviewTemplate(null)}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -515,24 +387,80 @@ export default function StudentResumeBuilderPage() {
           </DialogHeader>
           
           <div className="space-y-6">
-            {/* Template Preview Image */}
-            <div className="border rounded-lg p-6 bg-gray-50">
-              <div className="aspect-[8.5/11] bg-white shadow-lg rounded border mx-auto max-w-2xl">
-                <div className="h-full flex items-center justify-center">
-                  <div className="text-center space-y-4">
-                    <FileText className="h-24 w-24 text-gray-400 mx-auto" />
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-bold text-gray-800">{previewTemplate?.name}</h3>
-                      <p className="text-gray-600">{previewTemplate?.category} Template</p>
-                      <div className="text-sm text-gray-500 space-y-1">
-                        <p>• Professional header with contact information</p>
-                        <p>• Clean section dividers and typography</p>
-                        <p>• Optimized for ATS compatibility</p>
-                        <p>• Modern, professional layout</p>
-                      </div>
-                    </div>
+            {/* Template Features */}
+            {previewTemplate && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <h4 className="font-semibold text-sm mb-2">Features:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {previewTemplate.features.map((feature, idx) => (
+                      <Badge key={idx} variant="outline" className="text-xs">
+                        {feature}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
+                <div>
+                  <h4 className="font-semibold text-sm mb-2">Best for:</h4>
+                  <p className="text-sm text-gray-600">{previewTemplate.bestFor}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Full Template Preview */}
+            <div className="border rounded-lg p-6 bg-gray-50">
+              <div className="mx-auto max-w-4xl">
+                {previewTemplate && (() => {
+                  const mockData = {
+                    personalInfo: {
+                      fullName: 'Alex Johnson',
+                      email: 'alex.johnson@email.com',
+                      phone: '(555) 123-4567',
+                      location: 'San Francisco, CA',
+                      summary: 'Dynamic professional with 5+ years of experience in leading cross-functional teams and driving innovative solutions. Proven track record of delivering high-impact projects and fostering collaborative environments that drive business growth and operational excellence.',
+                    },
+                    experience: [
+                      {
+                        id: '1',
+                        company: 'Innovation Corp',
+                        position: 'Senior Project Manager',
+                        startDate: '2022-01',
+                        endDate: '',
+                        description: 'Led cross-functional teams of 15+ members in delivering complex software solutions. Implemented agile methodologies that improved project delivery time by 30%. Managed budgets exceeding $2M and maintained 98% client satisfaction rate.',
+                      },
+                      {
+                        id: '2',
+                        company: 'TechStart Solutions',
+                        position: 'Product Coordinator',
+                        startDate: '2020-06',
+                        endDate: '2021-12',
+                        description: 'Coordinated product development lifecycle from ideation to launch. Collaborated with engineering, design, and marketing teams to deliver user-centered solutions. Achieved 25% increase in user engagement through strategic feature implementation.',
+                      },
+                    ],
+                    education: [
+                      {
+                        id: '1',
+                        institution: 'University of California, Berkeley',
+                        degree: 'Bachelor of Science',
+                        field: 'Business Administration',
+                        graduationDate: '2020-05',
+                        gpa: '3.7',
+                      },
+                    ],
+                    skills: ['Project Management', 'Agile/Scrum', 'Data Analysis', 'Strategic Planning', 'Team Leadership', 'Cross-functional Collaboration', 'Budget Management', 'Stakeholder Communication'],
+                  };
+
+                  switch (previewTemplate.id) {
+                    case 'modern':
+                      return <ModernTemplate resumeData={mockData} isPreview={true} />;
+                    case 'creative':
+                      return <CreativeTemplate resumeData={mockData} isPreview={true} />;
+                    case 'academic':
+                      return <AcademicTemplate resumeData={mockData} isPreview={true} />;
+                    default:
+                      return <ModernTemplate resumeData={mockData} isPreview={true} />;
+                  }
+                })()}
               </div>
             </div>
 

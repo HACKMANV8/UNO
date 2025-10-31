@@ -23,7 +23,11 @@ import {
   Loader2
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { ProfessionalResumeTemplate } from '@/components/ProfessionalResumeTemplate';
+import { 
+  ModernTemplate, 
+  CreativeTemplate, 
+  AcademicTemplate 
+} from '@/components/resume-templates';
 import { generateResumePDF } from '@/lib/pdfGenerator';
 import { getStudentCredentials, StudentCredential, CredentialType, updateUserProfile } from '@/services/firebase';
 
@@ -83,6 +87,32 @@ export default function StudentResumeEditorPage() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [credentials, setCredentials] = useState<StudentCredential[]>([]);
+
+  // Get template information
+  const getTemplateName = (id: string) => {
+    const templates = {
+      modern: 'Modern Minimalist',
+      creative: 'Creative Portfolio',
+      academic: 'Academic Scholar'
+    };
+    return templates[id as keyof typeof templates] || 'Modern Minimalist';
+  };
+
+  // Render the correct template component
+  const renderTemplate = () => {
+    const props = { resumeData, isPreview: false };
+    
+    switch (templateId) {
+      case 'modern':
+        return <ModernTemplate {...props} />;
+      case 'creative':
+        return <CreativeTemplate {...props} />;
+      case 'academic':
+        return <AcademicTemplate {...props} />;
+      default:
+        return <ModernTemplate {...props} />;
+    }
+  };
 
   useEffect(() => {
     if (isEditing) {
@@ -372,9 +402,12 @@ export default function StudentResumeEditorPage() {
               {isEditing ? 'Edit Resume' : 'Create Resume'}
             </h1>
             {templateId && (
-              <Badge variant="outline" className="mt-1">
-                Template: {templateId}
-              </Badge>
+              <div className="flex items-center gap-2 mt-1">
+                <Badge variant="outline">
+                  {getTemplateName(templateId)}
+                </Badge>
+                <span className="text-sm text-muted-foreground">Template</span>
+              </div>
             )}
           </div>
         </div>
@@ -400,9 +433,9 @@ export default function StudentResumeEditorPage() {
       </div>
 
       {/* Resume Form */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left Column - Form */}
-        <div className="space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           {/* Personal Information */}
           <Card>
             <CardHeader>
@@ -725,30 +758,40 @@ export default function StudentResumeEditorPage() {
         </div>
 
         {/* Right Column - Preview */}
-        <div className="lg:sticky lg:top-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Resume Preview</CardTitle>
+        <div className="lg:col-span-3 lg:sticky lg:top-6">
+          <Card className="h-fit">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center justify-between">
+                <span>Resume Preview</span>
+                <Badge variant="outline">
+                  {getTemplateName(templateId || 'classic')}
+                </Badge>
+              </CardTitle>
             </CardHeader>
-            <CardContent className="p-2">
+            <CardContent className="p-4">
               <div 
-                className="border rounded bg-gray-100 shadow-inner overflow-y-auto overflow-x-hidden"
+                className="border-2 border-gray-200 rounded-lg bg-gray-50 shadow-inner overflow-y-auto overflow-x-hidden"
                 style={{ 
-                  height: '750px',
-                  width: '100%'
+                  height: '900px',
+                  width: '100%',
+                  position: 'relative'
                 }}
               >
                 <div 
-                  className="mx-auto bg-white shadow-lg"
+                  className="mx-auto bg-white shadow-xl"
                   style={{ 
-                    width: '100%',
+                    width: '595px', // A4 width in pixels at 72 DPI
                     maxWidth: '100%',
-                    minHeight: '100%',
-                    transform: 'scale(1)',
-                    transformOrigin: 'top center'
+                    minHeight: '842px', // A4 height in pixels at 72 DPI
+                    transform: 'scale(0.8)',
+                    transformOrigin: 'top center',
+                    margin: '20px auto 40px',
+                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+                    borderRadius: '4px',
+                    overflow: 'hidden'
                   }}
                 >
-                  <ProfessionalResumeTemplate resumeData={resumeData} />
+                  {renderTemplate()}
                 </div>
               </div>
             </CardContent>

@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Home, FileText, MessageSquare, Settings, ClipboardList, UserCheck, Shield, Briefcase } from 'lucide-react';
+import { Home, FileText, MessageSquare, Settings, ClipboardList, UserCheck, Shield, Briefcase, Video } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function TabNavigation() {
@@ -12,6 +12,7 @@ export function TabNavigation() {
   const studentTabs = [
     { path: '/student/dashboard', label: 'Dashboard', icon: Home },
     { path: '/student/resume', label: 'Resume Builder', icon: FileText },
+    { path: '/student/interview', label: 'Interview', icon: Video },
     { path: '/student/job-applications', label: 'Job Applications', icon: Briefcase },
     { path: '/student/settings', label: 'Settings', icon: Settings },
   ];
