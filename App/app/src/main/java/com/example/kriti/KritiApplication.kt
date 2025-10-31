@@ -3,11 +3,13 @@ package com.example.kriti
 import android.app.Application
 import androidx.work.*
 import com.example.kriti.worker.RefreshDataWorker
+import com.google.firebase.FirebaseApp
 import java.util.concurrent.TimeUnit
 
 class KritiApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        FirebaseApp.initializeApp(this)
         setupRecurringWork()
     }
 

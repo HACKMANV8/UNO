@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "3515192721",
+    "project_id": "kriti-e1b44",
+    "storage_bucket": "kriti-e1b44.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3515192721:android:33bf4fa85eb6a872e7b630",
+        "android_client_info": {
+          "package_name": "com.example.kriti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3515192721-klrvoom18g96p233ld58cuoejorl48i0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUBobeVj_O7RPUxugHffeySnR2Vz3vaCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3515192721-klrvoom18g96p233ld58cuoejorl48i0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
