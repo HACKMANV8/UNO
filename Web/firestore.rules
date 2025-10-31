@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read/write their own data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow authority users to read all users for approval
+    match /users/{userId} {
+      allow read, write: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'authority';
+    }
+    
+    // Credentials can be read by the student and issuers
+    match /credentials/{credentialId} {
+      allow read: if request.auth != null && 
+        (resource.data.studentKritiId == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.kritiId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['issuer_admin', 'issuer_staff', 'authority']);
+      allow write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['issuer_admin', 'issuer_staff', 'authority'];
+    }
+    
+    // Applicants can be managed by recruiters and viewed by authority
+    match /applicants/{applicantId} {
+      allow read, write: if request.auth != null && 
+        (resource.data.recruiterUid == request.auth.uid ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'authority');
+    }
+    
+    // Allow authority to read all collections for management
+    match /{document=**} {
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'authority';
+    }
+  }
+}

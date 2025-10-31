@@ -1,0 +1,34 @@
+// Quick script to fix authority user status
+// Run this in browser console on your Firebase project
+
+// Instructions:
+// 1. Go to Firebase Console → Firestore Database
+// 2. Find your authority user document in the 'users' collection
+// 3. Add these fields if missing:
+
+/*
+Field Name: status
+Field Value: approved
+Field Type: string
+
+Or update existing fields to match:
+authorizationStatus → status
+*/
+
+console.log(`
+🔧 AUTHORITY USER FIX REQUIRED:
+
+Go to Firebase Console → Firestore Database → users collection
+Find your authority user document and ensure it has:
+
+✅ Required fields:
+- email: "authority@kriti.gov.in"
+- name: "Kriti Authority Admin" 
+- role: "authority"
+- status: "approved"  ← THIS IS THE KEY FIELD!
+
+❌ Remove or rename:
+- authorizationStatus (if exists) → should be "status"
+
+Then try logging in again!
+`);
