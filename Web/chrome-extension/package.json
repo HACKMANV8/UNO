@@ -1,0 +1,35 @@
+{
+  "name": "kriti-job-autofill-extension",
+  "version": "1.0.0",
+  "description": "Chrome extension for auto-filling job applications using Kriti credentials",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Open test-form.html in Chrome to test the extension\"",
+    "build": "echo \"No build process needed - ready to install\"",
+    "install-extension": "echo \"Go to chrome://extensions and load unpacked this directory\""
+  },
+  "keywords": [
+    "chrome-extension",
+    "auto-fill",
+    "job-application",
+    "firebase",
+    "career"
+  ],
+  "author": "Kriti Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/kriti-hire-forge"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "files": [
+    "manifest.json",
+    "background.js",
+    "content.js",
+    "popup.html",
+    "popup.js",
+    "README.md",
+    "test-form.html"
+  ]
+}

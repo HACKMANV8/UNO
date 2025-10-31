@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Job Application Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .note {
+            background-color: #e7f3ff;
+            border: 1px solid #b3d7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>🚀 Software Developer Job Application</h1>
+        
+        <div class="note">
+            <strong>Test Page for Kriti Auto-Fill Extension</strong><br>
+            This form is designed to test the Chrome extension's auto-fill capabilities. Install and login to the extension, then click "Fill Current Page" to see the magic! ✨
+        </div>
+
+        <form id="jobApplicationForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name *</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name *</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="experience">Years of Experience</label>
+                    <select id="experience" name="experience">
+                        <option value="">Select...</option>
+                        <option value="0">0 years</option>
+                        <option value="1">1 year</option>
+                        <option value="2">2 years</option>
+                        <option value="3">3 years</option>
+                        <option value="4">4 years</option>
+                        <option value="5">5+ years</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Current Location</label>
+                <input type="text" id="location" name="location" placeholder="City, State, Country">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="currentPosition">Current Position</label>
+                    <input type="text" id="currentPosition" name="currentPosition">
+                </div>
+                <div class="form-group">
+                    <label for="currentCompany">Current Company</label>
+                    <input type="text" id="currentCompany" name="currentCompany">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="degree">Highest Degree</label>
+                    <input type="text" id="degree" name="degree" placeholder="e.g., Bachelor's in Computer Science">
+                </div>
+                <div class="form-group">
+                    <label for="university">University/Institution</label>
+                    <input type="text" id="university" name="university">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="skills">Technical Skills</label>
+                <textarea id="skills" name="skills" placeholder="List your programming languages, frameworks, tools, etc."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="summary">Professional Summary</label>
+                <textarea id="summary" name="summary" placeholder="Brief summary of your professional background and career objectives"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="coverLetter">Why are you interested in this position?</label>
+                <textarea id="coverLetter" name="coverLetter" placeholder="Tell us why you'd be a great fit for this role"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="linkedIn">LinkedIn Profile (Optional)</label>
+                    <input type="url" id="linkedIn" name="linkedIn" placeholder="https://linkedin.com/in/yourprofile">
+                </div>
+                <div class="form-group">
+                    <label for="portfolio">Portfolio/GitHub (Optional)</label>
+                    <input type="url" id="portfolio" name="portfolio" placeholder="https://github.com/yourusername">
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Application</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('jobApplicationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('🎉 Test form submitted successfully! In a real job site, this would submit your application.');
+        });
+
+        // Add some visual feedback when fields are filled
+        document.querySelectorAll('input, textarea, select').forEach(field => {
+            field.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    this.style.borderColor = '#4CAF50';
+                    this.style.backgroundColor = '#f8fff8';
+                } else {
+                    this.style.borderColor = '#ddd';
+                    this.style.backgroundColor = 'white';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

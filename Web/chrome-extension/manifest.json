@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Kriti Job Auto-Fill",
+  "version": "1.1.0",
+  "description": "Auto-fill job applications using your verified Kriti credentials",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*.linkedin.com/*",
+    "https://*.indeed.com/*",
+    "https://*.naukri.com/*",
+    "https://*.glassdoor.com/*",
+    "https://*.monster.com/*",
+    "https://*.dice.com/*",
+    "https://*.ziprecruiter.com/*",
+    "https://*.simplyhired.com/*",
+    "https://*.careerbuilder.com/*",
+    "https://identitytoolkit.googleapis.com/*",
+    "https://firestore.googleapis.com/*",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Kriti Job Auto-Fill"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

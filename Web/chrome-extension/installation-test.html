@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Extension Installation Verification</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+        .step { margin: 20px 0; padding: 15px; border-left: 4px solid #4CAF50; background: #f8f9fa; }
+        .error { border-left-color: #f44336; }
+        .success { border-left-color: #4CAF50; background: #e8f5e8; }
+        button { background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #45a049; }
+        .code { background: #f1f1f1; padding: 5px; border-radius: 3px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Kriti Extension Installation Check</h1>
+        
+        <div class="step">
+            <h3>Step 1: Remove Old Extension</h3>
+            <p>Go to <span class="code">chrome://extensions/</span> and remove any existing "Kriti" extension.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Clear Chrome Cache</h3>
+            <p>Press <span class="code">Ctrl+Shift+R</span> or go to <span class="code">chrome://settings/clearBrowserData</span></p>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Install Fresh Extension</h3>
+            <p>Load unpacked from the <span class="code">chrome-extension</span> folder</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Test Extension</h3>
+            <button onclick="testExtension()">Click to Test Extension</button>
+            <div id="testResult" style="margin-top: 10px;"></div>
+        </div>
+
+        <div class="step success">
+            <h3>✅ Expected Result</h3>
+            <p>Extension should load without any "firebase-config.js" or "importScripts" errors.</p>
+            <p>You should see a login form when clicking the extension icon.</p>
+        </div>
+    </div>
+
+    <script>
+        function testExtension() {
+            const resultDiv = document.getElementById('testResult');
+            
+            // Check if Chrome extension APIs are available
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                resultDiv.innerHTML = '<div class="success">✅ Chrome extension environment detected! The extension should work.</div>';
+            } else {
+                resultDiv.innerHTML = '<div class="error">❌ Chrome extension environment not detected. Make sure you\'re testing in a proper Chrome environment.</div>';
+            }
+        }
+
+        // Auto-test on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Kriti Extension Test Page Loaded');
+            console.log('Current URL:', window.location.href);
+            console.log('User Agent:', navigator.userAgent);
+        });
+    </script>
+</body>
+</html>
