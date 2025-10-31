@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kritimobileapp"
+    namespace = "com.example.kriti"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.kritimobileapp"
+        applicationId = "com.example.kriti"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
