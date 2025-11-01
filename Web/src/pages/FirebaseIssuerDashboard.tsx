@@ -19,7 +19,8 @@ import {
   Calendar,
   FileText,
   Shield,
-  User
+  User,
+  ScanLine
 } from 'lucide-react';
 import { 
   issueCredential,
@@ -41,6 +42,8 @@ import {
   checkContractStatus,
   connectWallet
 } from '@/services/blockchain';
+import DocumentOCR from '@/components/issuer/DocumentOCR';
+import { ExtractedDocumentData } from '@/services/documentOCR';
 
 const credentialTypeLabels: Record<CredentialType, string> = {
   degree: 'Degree Certificate',
@@ -83,6 +86,9 @@ export default function FirebaseIssuerDashboard() {
     department: '',
     designation: ''
   });
+
+  // OCR state
+  const [ocrExtractedData, setOcrExtractedData] = useState<ExtractedDocumentData | null>(null);
   
   const { user } = useAuthStore();
 
@@ -402,6 +408,28 @@ export default function FirebaseIssuerDashboard() {
     }
   };
 
+  // OCR handler
+  const handleOCRDataExtracted = (data: ExtractedDocumentData) => {
+    setOcrExtractedData(data);
+    
+    // Pre-fill credential form with OCR data
+    setCredentialData({
+      recipientName: data.full_name,
+      institutionName: data.institution_name,
+      courseName: data.degree_or_course,
+      registrationNumber: data.registration_number,
+      completionYear: data.completion_year,
+      marksOrGrade: data.total_marks_or_grade.toString(),
+      marksFormat: data.marks_format,
+      description: `${data.document_type} from ${data.institution_name}`,
+      additionalDetails: `Extracted via OCR processing`
+    });
+
+    // Show success message
+    setSuccessMessage('Document processed! You can now switch to "Issue Credential" tab to create a credential with the extracted data.');
+    setTimeout(() => setSuccessMessage(null), 5000);
+  };
+
   // Load issued credentials
   const loadIssuedCredentials = async () => {
     if (!user?.uid) return;
@@ -502,10 +530,14 @@ export default function FirebaseIssuerDashboard() {
       )}
 
       <Tabs defaultValue="issue" className="space-y-6">
-        <TabsList className={`grid w-full ${user?.role === 'issuer_admin' ? 'grid-cols-4' : 'grid-cols-3'}`}>
+        <TabsList className={`grid w-full ${user?.role === 'issuer_admin' ? 'grid-cols-5' : 'grid-cols-4'}`}>
           <TabsTrigger value="issue" className="flex items-center space-x-2">
             <Plus className="h-4 w-4" />
             <span>Issue Credential</span>
+          </TabsTrigger>
+          <TabsTrigger value="ocr" className="flex items-center space-x-2">
+            <ScanLine className="h-4 w-4" />
+            <span>OCR Extract</span>
           </TabsTrigger>
           <TabsTrigger value="blockchain" className="flex items-center space-x-2">
             <Shield className="h-4 w-4" />
@@ -544,6 +576,20 @@ export default function FirebaseIssuerDashboard() {
               </div>
             </CardContent>
           </Card>
+
+          {/* OCR Pre-filled Notice */}
+          {ocrExtractedData && (
+            <Alert className="border-blue-200 bg-blue-50">
+              <ScanLine className="h-4 w-4" />
+              <div>
+                <h3 className="font-medium text-blue-800">OCR Data Pre-filled</h3>
+                <p className="text-blue-700 text-sm mt-1">
+                  Form fields have been automatically filled with data extracted from your document. 
+                  Please review and complete the credential issuance below.
+                </p>
+              </div>
+            </Alert>
+          )}
 
           {/* Credential Issuance Form */}
           <Card className="glass-card">
@@ -694,6 +740,38 @@ export default function FirebaseIssuerDashboard() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="ocr" className="space-y-6">
+          <DocumentOCR onDataExtracted={handleOCRDataExtracted} />
+          
+          {ocrExtractedData && (
+            <Card className="glass-card border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2 text-green-800">
+                  <CheckCircle className="h-5 w-5" />
+                  <span>Data Extracted Successfully</span>
+                </CardTitle>
+                <CardDescription>
+                  The credential form has been pre-filled with extracted data. 
+                  Switch to "Issue Credential" tab to complete the process.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium">Name:</span> {ocrExtractedData.full_name}
+                  </div>
+                  <div>
+                    <span className="font-medium">Institution:</span> {ocrExtractedData.institution_name}
+                  </div>
+                  <div>
+                    <span className="font-medium">Document:</span> {ocrExtractedData.document_type}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         <TabsContent value="blockchain" className="space-y-6">
